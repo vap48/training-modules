@@ -117,7 +117,7 @@ x <- 5.5
 x
 ```
 
-We can modify an existing variable by reassigning it to its same name. 
+We can also modify an existing variable by writing an expression that computes an new value using it and reassigning the result to the same name. 
 Here we'll add `2` to `x` and reassign the result back to `x`. 
 
 ```{r var-modify, live = TRUE}
@@ -125,7 +125,8 @@ Here we'll add `2` to `x` and reassign the result back to `x`.
 ```
 
 ### Variable naming note:
-As best you can, it is a good idea to make your variable names informative (e.g. `x` doesn't mean anything, but `sandwich_price` is meaningful... if we're talking about the cost of sandwiches, that is..). 
+
+As best you can, it is a good idea to make your variable names informative (e.g. `x` doesn't mean anything, but `sandwich_price` is meaningful... if we're talking about the cost of sandwiches, that is). 
 
 ### Comments
 
@@ -133,7 +134,7 @@ Arguably the __most important__ aspect of your coding is comments: Small pieces 
 Comments are invaluable for communicating your code to others, but they are most important for **Future You**. 
 Future You comes into existence about one second after you write code, and has no idea what on earth Past You was thinking. 
 
-Comments in R code are indicated with pound signs (*aka* hashtags, octothorps). R will _ignore_ any text in a line after the pound sign, so you can put whatever text you like there.
+Comments in R code are indicated with pound signs (`#` *aka* hashtags, octothorps). R will _ignore_ any text in a line after the pound sign, so you can put whatever text you like there.
 
 ```{r comments}
 22/7 # not quite pi
@@ -143,10 +144,15 @@ Comments in R code are indicated with pound signs (*aka* hashtags, octothorps). 
 20 * atan(1/7) + 8 * atan(3/79) 
 ```
 
+
+
 Help out Future You by adding lots of comments! 
 Future You next week thinks Today You is an idiot, and the only way you can convince Future You that Today You is reasonably competent is by adding comments in your code explaining why Today You is actually not so bad.
 
+That said, you should also feel free to include explanatory text *outide* of code chunks if you are working in an `Rmarkdown` document like this one. Just be aware that the `#` symbol has a very different meaning in this context: it indicates header text, not a comment.
+
 ## Functions
+
 We can use pre-built computation methods called "functions" for other operations. 
 Functions have the following format, where the _argument_ is the information we are providing to the function for it to run. 
 An example of this was the `atan()` function used above.
@@ -204,9 +210,12 @@ log(meaning)
 
 ### Variable Types
 
-Variable types in R can sometimes be _coerced_ (converted) from one type to another.
+Variables in R can store different kinds of data, such as numbers, character strings (text), or boolean (`TRUE`/`FALSE`) values, as well as more complicated data structures.
+To keep track of this, each variable has not just a value, but also a  **type**. 
+Most of the time, these will be set automatically, as in the example below where we define a variable with a number.
 
-```{r}
+
+```{r numeric-x}
 # Define a variable with a number
 x <- 15
 ```
@@ -217,20 +226,21 @@ The function `class()` will tell us the variable's type.
 class(x)
 ```
 
-Let's coerce it to a character. 
+Occasionally, we will want to change the type of a variable, which we call _coercion_.
+Let's _coerce_ our `x` variable to a character type. 
 
-```{r}
+```{r coerce-num}
 x <- as.character(x)
-class(x)
-```
-
-See it now has quotes around it? It's now a character and will behave as such
-
-```{r}
 x
 ```
 
-Use this chunk to try to perform calculations with `x`, now that it is a character, what happens? 
+See that the value now has quotes around it? It's now a character and will behave as such
+
+```{r}
+class(x)
+```
+
+Use this chunk to try to perform calculations with `x`. Now that it is a character, what happens? 
 
 ```{r live = TRUE}
 # Try to perform calculations on `x`
@@ -238,7 +248,7 @@ Use this chunk to try to perform calculations with `x`, now that it is a charact
 
 But we can't coerce everything:
 
-```{r}
+```{r character-x}
 # Let's create a character variable
 x <- "look at my character variable"
 ```
@@ -261,7 +271,7 @@ For reference, here's a summary of some of the most important variable types.
 
 | Variable Type | Definition | Examples | Coersion |
 |---------------|------------|----------| --------|
-| `numeric`       | Any number value | `5`<br>`7.5` <br>`-1`| `as.numeric()`
+| `numeric`       | Any number value | `5` <br> `7.5` <br> `-1`| `as.numeric()`
 | `integer`       | Any _whole_ number value (no decimals) | `5` <br> `-100` | `as.integer()`
 |`character`      | Any collection of characters defined within _quotation marks_. Also known as a "string". | `"a"` (a single letter) <br>`"stringofletters"` (a whole bunch of characters put together as one) <br> `"string of letters and spaces"` <br> `"5"` <br> `'single quotes are also good'` | `as.character()`
 |`logical`      | A value of `TRUE`, `FALSE`, or `NA` | `TRUE` <br> `FALSE` <br> `NA` (not defined) | `as.logical()` 
@@ -269,6 +279,7 @@ For reference, here's a summary of some of the most important variable types.
 
 ### Vectors
 
+A vector in R is a sequence of values that all have the same type. 
 You will have noticed that all your computations tend to pop up with a `[1]` preceding them in R's output. 
 This is because, in fact, all (ok mostly all) variables are _by default_  vectors, and our answers are the first (in these cases only) value in the vector. 
 As vectors get longer, new index indicators will appear at the start of new lines. 
@@ -310,14 +321,14 @@ Colons are also a nice way to quickly make ordered numeric vectors
 Use a colon to specify an inclusive range of indices
 This will return an vector with 2, 3, 4, and 5.
 
-```{r subset-many}
+```{r subset-range}
 my_numeric_vector[2:5]
 ```
 
 One major benefit of vectors is the concept of **vectorization**, where R by default performs operations on the _entire vector at once_. 
 For example, we can get the log of all numbers 1-2 with a single, simple call, and more!
 
-```{r vectorize}
+```{r vector-seq}
 values_1_to_20 <- 1:20
 ```
 ```{r vectorize-log, live = TRUE}
@@ -352,8 +363,7 @@ mean(values_1_to_20)
 ### A note on variable naming
 
 We have learned functions such as `c`, `length`, `sum`, and etc. 
-Imagine defining a variable called `c`: This will work, but it will lead to a 
-lot of unintended bugs, so its best to avoid this. 
+Imagine defining a variable called `c`: This will work, but it will lead to a lot of unintended bugs, so its best to avoid this. 
 
 ### The `%in%` logical operator 
 
@@ -379,9 +389,9 @@ We can test a vector of values being within another vector of values.
 
 ## Data frames
 
-_Data frames are the most fundamental unit of data analysis in R._ 
+_Data frames are one of the most fundamental units of data analysis in R._ 
 They are tables which consist of rows and columns, much like a _spreadsheet_. 
-Each column is a variable which behaves as a _vector_, and each row is an observation. 
+Each column is a variable which behaves as a _vector_ (all data is the same type), and each row is an observation. 
 We will begin our exploration with the old trusted dataset `iris`, which comes with R. 
 Learn about this dataset using the standard help approach of `?iris`.
 
@@ -415,7 +425,7 @@ str(iris)
 
 You'll notice that the column `Species` is a _factor_: This is a special type of character variable that represents distinct categories known as "levels". 
 We have learned here that there are three levels in the `Species` column: setosa, versicolor, and virginica. 
-We might want to explore individual columns of the data frame more in-depth. 
+We might want to explore individual columns of the data frame in more depth. 
 We can examine individual columns using the dollar sign `$` to select one by name:
 
 ```{r iris-subset}
